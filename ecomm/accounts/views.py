@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
 from accounts.forms import ProductForm, ProductImageForm, CatogaryForm, ProfileForm, SubcatogaryForm, ProductUpdateForm
-from accounts.models import Profile, cartItems, cart, Order, OrderItems
+from accounts.models import Profile, UserDetails, cartItems, cart, Order, OrderItems
 from products.models import Coupon, Product, ProductImages, SizeVariant, Catogary, SubCategory
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -273,6 +273,7 @@ def add_to_cart(request, uid):
     print(uid)
     user = request.user
     Cart, _ = cart.objects.get_or_create(user=user, is_paid=False)
+    print('user_id = ',user.id)
     cart_item = cartItems.objects.create(cart=Cart, product=product)
 
     if variant:
@@ -348,29 +349,47 @@ def success(request):
 
 def checkout(request):
     cart_obj = None
-    try:
-        cart_obj = cart.objects.get(is_paid=False, user=request.user)
-    except Exception as e:
-        print(e)
-
-    if cart_obj:
-        client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
-        payment = client.order.create({'amount': cart_obj.get_cart_total() * 100, 'currency': 'INR', 'payment_capture': 1})
-        cart_obj.razorpay_order_id = payment['id']
-        cart_obj.save()
-
-        print("**********")
-        print(payment)
-        print("**********")
+    cart_obj = cart.objects.get(is_paid=False, user=request.user)
     
-    payment = None
-    context = {'cart_obj': cart_obj, 'payment': payment}
+    userdetails = UserDetails.objects.filter(user=request.user).first()
+
+    # if cart_obj:
+    #     client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
+    #     payment = client.order.create({'amount': cart_obj.get_cart_total() * 100, 'currency': 'INR', 'payment_capture': 1})
+    #     cart_obj.razorpay_order_id = payment['id']
+    #     cart_obj.save()
+
+    #     print("**********")
+    #     print(payment)
+    #     print("**********")
+    
+    # payment = None
+    context = {'cart_obj': cart_obj, 'userdetails': userdetails}
     return render(request, 'account/checkout.html', context)
 
 
 @login_required
 def placeorder(request):
     if request.method == "POST":
+
+        currentuser = User.objects.filter(user=request.user.id).first()
+        if not currentuser.first_name:
+            currentuser.first_name = request.POST.get('fname')
+            currentuser.last_name = request.POST.get('lname')
+            currentuser.email = request.POST.get('email')
+            currentuser.save()
+
+        if not UserDetails.objects.filter(user=request.user):
+            userdetails = UserDetails()
+            userdetails.user = request.user
+            userdetails.phone = request.POST.get('phone')
+            userdetails.address = request.POST.get('address')
+            userdetails.country = request.POST.get('country')
+            userdetails.state = request.POST.get('state')
+            userdetails.city = request.POST.get('city')
+            userdetails.pincode = request.POST.get('pincode')
+            userdetails.save()
+
         order_obj = Order()
         order_obj.user = request.user
         order_obj.first_name = request.POST.get('fname')
@@ -386,12 +405,10 @@ def placeorder(request):
         order_obj.payment_mode = request.POST.get('payment_mode')
 
         Cart = cart.objects.filter(user=request.user)
+
         total_price = 0
         for item in Cart:
-            total_price = item.get_cart_total
-
-        Cart.is_paid = True
-        Cart.save()
+            total_price = item.get_cart_total()
 
         order_obj.total_price = total_price
         track_no = 'hi'+str(random.randint(11111111,99999999))
@@ -399,20 +416,22 @@ def placeorder(request):
             track_no = 'hi'+str(random.randint(11111111,99999999))
 
         order_obj.tracking_no = track_no
+        print(track_no)
+        print(total_price)
         order_obj.save()
 
-        orderitem_obj = cartItems.objects.filter(user=request.user)
+        orderitem_obj = cartItems.objects.filter(cart__user=request.user)
         for item in orderitem_obj:
             OrderItems.objects.create(
                 order = order_obj,
                 product = item.product,
-                price = item.get_product_price,
+                price = item.get_product_price(),
                 quantity = item.quantity
             )
 
             #to decrase the product quantity from available stock
-            orderproduct = Product.objects.filter(id=item.product_id).first()
-            orderproduct.total_quantity = orderproduct.total_quantity - item.quanttity
+            orderproduct = Product.objects.filter(uid=item.product_id).first()
+            orderproduct.total_quantity = orderproduct.total_quantity - item.quantity
             orderproduct.save()
 
             # clear users cart

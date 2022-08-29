@@ -25,6 +25,16 @@ class Profile(BaseModel):
     def get_cart_count(self):
         return cartItems.objects.filter(cart__is_paid=False, cart__user=self.user).count()
 
+
+class UserDetails(BaseModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=150)
+    address = models.TextField()
+    country = models.CharField(max_length=150)
+    state = models.CharField(max_length=150)
+    city = models.CharField(max_length=150)
+    pincode = models.CharField(max_length=150)
+
     
 class cart(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts')
@@ -117,7 +127,7 @@ class Order(BaseModel):
     state = models.CharField(max_length=150)
     city = models.CharField(max_length=150)
     pincode = models.CharField(max_length=150)
-    total_price = models.FloatField()
+    total_price = models.IntegerField()
     payment_mode = models.CharField(max_length=150)
     payment_id = models.CharField(max_length=250, null=True, blank=True)
     orderStatus = (
@@ -134,18 +144,18 @@ class Order(BaseModel):
     # razorpay_patment_id = models.CharField(max_length=200, null=True, blank=True)
     # razorpay_signature = models.CharField(max_length=200, null=True, blank=True)
 
-    def __str__(self) -> str:
-        return self.tracking_no
+    def __str__(self):
+        return str(self.first_name)
 
 
 class OrderItems(BaseModel):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price = models.FloatField()
+    price = models.IntegerField()
     quantity = models.IntegerField()
 
     def __str__(self) -> str:
-        return self.product.product_name, self.order.tracking_no
+        return self.product.product_name
 
     def get_product_price(self):
         Price = []

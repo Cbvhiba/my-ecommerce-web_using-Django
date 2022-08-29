@@ -5,8 +5,10 @@ checkout
 
 {% block body %}
 <div class="container" style="margin-top: 120px;">
-    <form action="">
+    <form action="{% url 'placeorder' %}" method="post">
+        {% csrf_token%}
         <div class="row">
+            {% include 'base/alert.html' %}
             <div class="col-md-7 checkoutForm">
                 <div class="card shadow">
                     <div class="card-body">
@@ -15,47 +17,47 @@ checkout
                         <div class="row">
                             <div class="col-md-6">
                                 <label>First Name</label>
-                                <input type="text" name="fname" required class="form-control" placeholder="Enter First Name">
+                                <input type="text" name="fname" required value="{{ request.user.first_name }}" class="form-control" placeholder="Enter First Name">
                             </div>
                             <div class="col-md-6">
                                 <label>Last Name</label>
-                                <input type="text" name="lname" required class="form-control" placeholder="Enter Last Name">
+                                <input type="text" name="lname" required value="{{ request.user.last_name }}" class="form-control" placeholder="Enter Last Name">
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-6 ">
                                 <label>Email</label>
-                                <input type="text" name="email" required class="form-control" placeholder="Enter Email Address">
+                                <input type="text" name="email" required value="{{ request.user.email }}" class="form-control" placeholder="Enter Email Address">
                             </div>
                             <div class="col-md-6">
                                 <label>Phone Number</label>
-                                <input type="text" name="phone" required class="form-control" placeholder="Enter Phone Number">
+                                <input type="text" name="phone" required value="{{ userdetails.phone }}" class="form-control" placeholder="Enter Phone Number">
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-12">
                                 <label>Address</label>
-                                <textarea class="form-control" required name="address" id="" cols="67" rows="3" placeholder="Enter Address"></textarea>
+                                <textarea class="form-control" required name="address" id="" cols="67" rows="3" placeholder="Enter Address">{{ userdetails.address }}</textarea>
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-6">
                                 <label>Country</label>
-                                <input type="text" name="country" required class="form-control" placeholder="Enter Country">
+                                <input type="text" name="country" required value="{{ userdetails.country }}" class="form-control" placeholder="Enter Country">
                             </div>
                             <div class="col-md-6">
                                 <label>State</label>
-                                <input type="text" name="state" required class="form-control" placeholder="Enter state">
+                                <input type="text" name="state" required value="{{ userdetails.state }}" class="form-control" placeholder="Enter state">
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-6">
                                 <label>City</label>
-                                <input type="text" name="city" required class="form-control" placeholder="Enter City">
+                                <input type="text" name="city" required value="{{ userdetails.city }}" class="form-control" placeholder="Enter City">
                             </div>
                             <div class="col-md-6">
                                 <label>Pin Code</label>
-                                <input type="text" name="pincode" required class="form-control" placeholder="Enter Pincode">
+                                <input type="text" name="pincode" required value="{{ userdetails.pincode }}" class="form-control" placeholder="Enter Pincode">
                             </div>
                         </div>
                         
