@@ -1,0 +1,25 @@
+{% extends 'base/index.html' %}
+{% block title %}
+Wishlist
+{% endblock %}
+
+{% block body %}
+
+<div class="container border" style="margin-top: 150px;">
+    {% for wishlist in wishlist.wishlist_items.all %}
+    <div class="row">
+        <div class="col-md-6">
+            <img src="/media/{{wishlist.product_images.first.image}}" alt="">
+        </div>
+        <div class="col-md-6">
+            <h3>{{wishlist.product.product_name}</h3>
+            <p>Rs. {{wishlist.get_product_price}}</p>
+            <p>{{wishlist.product.product_desc}}</p>
+            <small>size {{wishlist.size_variant.size}}</small>
+            <a href="#" class="btn btn-outline-success">Remove from wishlist</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

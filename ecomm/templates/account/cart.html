@@ -1,0 +1,96 @@
+{% extends 'base/index.html' %}
+{% block title %}
+Cart
+{% endblock %}
+
+{% block body %}
+
+<section class="section-content padding-y bg-light">
+    
+    <div class="container ">
+        
+        <div class="row">
+            
+            <main class="col-md-9">
+                
+                <div class="card">
+                    
+                    <table class="table table-borderless table-shopping-cart" >
+                        <thead class="text-muted">
+                            <tr class="small text-uppercase">
+                                <th scope="col">Product</th>
+                                <th scope="col" width="120">Quantity</th>
+                                <th scope="col" width="120">Price</th>
+                                <th scope="col" width="200" class="text-right"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            {% for cart_item in cart.cart_items.all %}
+                            <tr>
+                                <td>
+                                    <figure class="itemside">
+                                        <div class="aside img-wrap embed-responsive embed-responsive-16by9"><img class="card-img-top embed-responsive-item"  src="/media/{{cart_item.product.product_images.first.image}}" alt=""></div>
+                                        <figcaption class="info">
+                                            <a href="" class="title text-dark">{{cart_item.product.product_name}}</a>
+                                            <a href="" class="small text-muted">Size: {{cart_item.size_variant.size}}</a>
+                                        </figcaption>
+                                    </figure>
+                                </td>
+                                <td>
+                                    <div class="input-group text-center quantity mr-3" style="width: 130px;">
+                                        <button class="input-group-text decrement-btn" style="width: 30px;"> - </button>
+                                        <input type="text" class=" qty form-control bg-light text-center" name="quantity" value="1">
+                                        <button class="input-group-text increment-btn" style="width: 30px;"> + </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="price-wrap">
+                                        <var class="price">Rs. {{cart_item.get_product_price}}</var>
+                                    </div>
+                                </td>
+                                <td><a data-original-title="Save to Wishlist" title="" href="#" class="btn btn-light"><i class="bi bi-heart"></i></a>
+                                <a href="{% url 'remove_cart' cart_item.uid %}" class="btn btn-light"> Remove </a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="card-body border-top">
+                        <a href="{% url 'index' %}" class="btn btn-light"><i class="bi bi-caret-left-fill"></i> Continue Shoping</a>
+                        <a href="{% url 'checkout' %}" class="btn btn-primary float-md-end"> Checkout <i class="bi bi-caret-right-fill"></i></a>
+                    </div> 
+                </div>
+            </main>
+            <aside class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            {% include 'base/alert.html' %}
+                            <div class="form-group">
+                                <label>Have Coupon?</label><br>
+                                <div class="input-group pt-2">
+                                    <input type="text" class="form-conntrol" name="coupon" placeholder="Enter coupon code"><br>
+                                    <span class="input-group-append pt-2 ps-4">
+                                        <button type="submit" class="btn btn-primary">Apply Coupon</button>
+                                    </span>
+                                </div>
+                            </div>
+                            {% if cart.coupon %}
+                            <a href="{% url 'remove_coupon' cart.uid %}" class="btn btn-success">{{cart.coupon.coupon_code}}</a>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <label>Total: {{cart.get_cart_total}}</label>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base/index.html' %}
+{% block title %}
+Login
+{% endblock %}
+
+{% block body %}
+
+    {% include "base/alert.html" %}
+    <a href="{% url 'login' %}" class="btn btn-outline-success">Login</a>
+
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base/index.html' %}
+{% block title %}
+checkout
+{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 120px;">
+    <form action="">
+        <div class="row">
+            <div class="col-md-7 checkoutForm">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h6>Basic Details</h6>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>First Name</label>
+                                <input type="text" name="fname" required class="form-control" placeholder="Enter First Name">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Last Name</label>
+                                <input type="text" name="lname" required class="form-control" placeholder="Enter Last Name">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6 ">
+                                <label>Email</label>
+                                <input type="text" name="email" required class="form-control" placeholder="Enter Email Address">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Phone Number</label>
+                                <input type="text" name="phone" required class="form-control" placeholder="Enter Phone Number">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-12">
+                                <label>Address</label>
+                                <textarea class="form-control" required name="address" id="" cols="67" rows="3" placeholder="Enter Address"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label>Country</label>
+                                <input type="text" name="country" required class="form-control" placeholder="Enter Country">
+                            </div>
+                            <div class="col-md-6">
+                                <label>State</label>
+                                <input type="text" name="state" required class="form-control" placeholder="Enter state">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label>City</label>
+                                <input type="text" name="city" required class="form-control" placeholder="Enter City">
+                            </div>
+                            <div class="col-md-6">
+                                <label>Pin Code</label>
+                                <input type="text" name="pincode" required class="form-control" placeholder="Enter Pincode">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h6>Order Summary</h6>
+                        <hr>
+                        {% if cart_obj %}
+                        <table class="table table-stripeds table-bordereds">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cart in cart_obj.cart_items.all %}
+                                <tr>
+                                    <td><img width="50px" height="50px" class="me-2" src="/media/{{cart.product.product_images.first.image}}" alt="">{{cart.product.product_name}}</td>
+                                    <td>
+                                        <div class="price-wrap">
+                                            <var class="price">Rs. {{cart.get_product_price}}</var>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <h5>Your cart is empty</h5> 
+                        {% endif %}
+                        <h6 class="blod">Total <span class="float-end">Rs.{{cart_obj.get_cart_total}}</span></h6>
+                        <input type="hidden" name="payment_mode" value="COD">
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-success w-100">Cash on delevery</button>
+                        </div>
+                        <!-- <button id="rzp-button1" class="btn btn-primary float-md-end"> Make Purchase <i class="bi bi-caret-right-fill"></i></button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    var options = {
+        "key": "rzp_test_Bz5fpUbrVpovPw",
+        "amount": "{{payment.amount}}",
+        "currency": "INR",
+        "name": "Ecomm_pro",
+        "description": "Purchases",
+        "image": "https://example.com/your_logo",
+        "order_id": "{{payment.id}}",
+        "handler": function(response){
+
+            window.location.href = `http://127.0.0.1:8000/accounts/success/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`
+            // alert(response.razorpay_payment_id);
+            // alert(response.razorpay_order_id);
+            // alert(response.razorpay_signature);
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.on('payment.failed', function(response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+    });
+    document.getElementById("rzp-button1").onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    };
+</script>
+
+
+{% endblock %}

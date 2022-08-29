@@ -1,0 +1,30 @@
+{% extends 'base/index.html' %}
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 100px;">
+    <div class="row">
+        <h2 class="col-md-6">Dashboard</h2>
+        <div class="col-md-6 float-right" style="padding-left: 400px; padding-top: 10px;">
+            <a href="{% url 'index' %}" style="color: blue;">Home</a>
+            <a href="">/ Dashboard</a>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <a href="">Users</a><i class="bi bi-pen"></i><i class="bi bi-plus"></i><i class="bi bi-trash"></i>
+        <a href="">Profile</a>
+        <a href="">Categories</a>
+        <a href="">Subcategories</a>
+        <a href="{% url 'add_product' %}">Products</a>
+        <a href="">Colorvariants</a>
+        <a href="">Sizevariants</a>
+        <a href="">Tags</a>
+        <a href="">Carts</a>
+        <a href="">Cartitems</a>
+        <a href="">Coupons</a>
+    </div>
+</div>
+{% endblock %}

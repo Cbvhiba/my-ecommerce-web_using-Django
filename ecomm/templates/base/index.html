@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>{% block title %}
+    Index
+    {% endblock %}
+  </title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS Files -->
+  <link href="{% static 'assets/css/variables.css' %}" rel="stylesheet">
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: ZenBlog - v1.1.0
+  * Template URL: https://bootstrapmade.com/zenblog-bootstrap-blog-template/
+  * Author: BootstrapMade.com
+  * License: https:///bootstrapmade.com/license/
+  ======================================================== -->
+
+  <style>
+    .product-tag{
+        background-color: red;
+        color: #fff;
+        font-size: 11px;
+        line-height: 1;
+        /* position: absolute; */
+        text-align: center;
+        text-transform: uppercase;
+        top: 22px;
+        padding: 7px 10px;
+        font-weight: bold;
+        max-width: 100px;
+    }
+    .checkoutForm label{
+        font-size: 15px;
+    }
+    .checkoutForm input{
+        font-size: 16px;
+    }
+</style>
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="#" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1>ZenBlog</h1>
+      </a>
+      <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group" style="width: 450px;">
+          <input type="text" name="search" class="form-control" placeholder="search here" >
+          <div class="input-group-append">
+            <button class="btn btn-outline-dark" type="submit" id="button-addon2">Search</button>
+          </div>
+        </div>
+      </form>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li class="nav-item dropdown">
+            <a href="" class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Catogaries</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="{% url 'catogary' %}">All Categories</a>
+              <!-- <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Something else here</a> -->
+            </div>
+          </li>
+          {% if user.is_authenticated %}
+          
+          <li class="nav-item"><a href="#">Welcome {{user.first_name}}</a></li>
+          <!-- {% if user.is_superuser %}
+          <li class="nav-item"><a href="">Add product</a></li>
+          
+          {% endif %} -->
+          <!-- <li class="nav-item"><a href="{% url 'logout' %}">Logout</a></li> -->
+          {% else %}
+          <li class="nav-item"><a href="{% url 'login' %}">Login</a></li>
+          <li class="nav-item"><a href="{% url 'register' %}">Register</a></li>
+          {% endif %}
+        </ul>
+      </nav><!-- .navbar -->
+
+      <div class="position-relative">
+        <a href="{% url 'cart' %}" class="mx-2 btn btn-sm btn-outline-primary"><span class="bi bi-cart-fill"></span>
+        (<span class="badge" style="color: red;">{{request.user.profile.get_cart_count}}</span>)</a>
+        <!-- <a href="#"class="mx-2 btn btn-sm btn-outline-danger"><span class="bi bi-heart">Wishlist</span></a> -->
+
+            <a class="mx-2 btn btn-sm btn-outline-primary dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="bi bi-person-circle"></span></a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="{% url 'edit_profile' user.id %}">Your account</a>
+              <a class="dropdown-item" href="#">Your orders</a>
+              <a class="dropdown-item" href="#">Your address</a>
+              {% if user.is_superuser %}
+              <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
+              {% endif %}
+              <hr>
+              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            </div>
+            
+        <!-- <div class="dropdown">
+          <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="bi bi-person-circle"></span>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div> -->
+
+        <!-- <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a> -->
+        <!-- <i class="bi bi-list mobile-nav-toggle"></i> -->
+
+        <!-- ======= Search Form ======= -->
+        <!-- <div class="search-form-wrap js-search-form-wrap"> -->
+          <!-- <form action="{% url 'search' %}" class="search-form" method="post"> -->
+            <!-- {% csrf_token %} -->
+            <!-- <span class="icon bi-search"></span> -->
+            <!-- <input type="text" placeholder="Search" class="form-control" name="search"> -->
+            <!-- <input type="submit" value="search"> -->
+            <!-- <button class="btn js-search-close"><span class="bi-x"></span></button> -->
+          <!-- </form> -->
+        <!-- </div>End Search Form -->
+
+      </div>
+
+    </div>
+
+  </header><!-- End Header -->
+
+  <main id="main">
+    {% block body %}
+    {% endblock %}
+    
+  </main><!-- End #main -->
+
+      
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>

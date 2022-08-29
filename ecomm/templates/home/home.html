@@ -1,0 +1,64 @@
+{% extends 'base/index.html' %}
+{% block title %}
+Home
+{% endblock %}
+
+
+
+{% block body %}
+
+<div class="container mt-5 pt-5">
+    <div class="row">
+        {% include 'base/slider.html' %}
+    </div>
+
+    <div class="row" style="margin-top: 10px;">
+        <h2 class="text-center">Shop Now</h2>
+        {% for catogary in catogaries %}
+        <div class="col-md-3">
+            <figure class="card card-product-grid">
+                <div class="img-wrap embed-responsive embed-responsive-16by9" style="height: 250px ;"><img class="card-img-top embed-responsive-item" style="height: 250px;" src="{{catogary.catogary_img.url}}"></div>
+                <figcaption class="info-wrap border-top">
+                    <p></p>
+                    <a href="{% url 'sub_list' catogary.slug %}" class="title"><b>{{catogary.catogary_name}}</b></a>
+<!--                    <a href="{% url 'delete_catogary' catogary.uid %}" class="float-end" style="color: red;"><i class="bi bi-trash3"></i></a>-->
+                    <p></p>
+                </figcaption>
+            </figure>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="row" style="margin-top: 10px;">
+        <h2 class="text-center">Featured Products</h2>
+        {% for product in products %}
+        <div class="col-md-3">
+            <figure class="card card-product-grid">
+                {% if product.tag %}
+                <label class="product-tag">{{product.tag}}</label>
+                {% endif %}
+                <div class="img-wrap embed-responsive embed-responsive-16by9" style="height: 250px ;"><img class="card-img-top embed-responsive-item" style="height: 250px ;" src="/media/{{product.product_images.first.image}}"></div>
+                <figcaption class="info-wrap border-top">
+                    <a href="{% url 'get_product' product.slug %}" class="title"><b>{{product.product_name}}</b></a>
+                    <!-- <div class="price mt-2"><i class="bi bi-currency-rupee small"></i>{{product.price}}.00</div> -->
+                    <div class="price mt-2">
+                        <!-- <a href="">${{product.price}}.00</a> -->
+                        {% if product.discount_percent %}
+                        <span class="product__price_discounted"><i class="small bi bi-currency-rupee"></i>{{ product.discount}}</span>
+                        <span class="product__price_original small" style="text-decoration: line-through;"><i class="small bi bi-currency-rupee"></i>{{ product.price }}</span>
+                        {% else %}  
+                        <span><i class="bi bi-currency-rupee small"></i>{{ product.price}}</span>
+                        {% endif %}
+                       <!-- <a href="{% url 'update_product' product.uid %}" class="btn btn-outline-success float-end">update</a> -->
+                        <p></p>
+                    </div>
+                </figcaption>
+            </figure>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

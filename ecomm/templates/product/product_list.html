@@ -1,0 +1,94 @@
+{% extends 'base/index.html' %}
+{% block title %}
+Products list
+{% endblock %}
+
+<style>
+  .product__price_original {
+      text-decoration: line-through;
+  }
+</style>
+
+{% block body %} 
+
+<div class="container mt-5 pt-5">
+    <div class="row">
+        
+        <h2 class="text-center">{{subcategory.subcategory}}</h2>
+        <p></p>
+        <p class="text-center">Page Number : {{page.number}}</p>
+        {% for product in page.object_list %}
+        <div class="col-md-3">
+            <figure class="card card-product-grid">
+              {% if product.tag %}
+                <label class="product-tag">{{product.tag}}</label>
+              {% endif %}
+                <div class="img-wrap embed-responsive embed-responsive-16by9" style="height: 250px ;"><img style="height: 250px ;" class="card-img-top embed-responsive-item" src="/media/{{product.product_images.first.image}}"></div>
+                <figcaption class="info-wrap border-top">
+                    <p></p>
+                    <a href="{% url 'get_product' product.slug %}" class="title"><b>{{product.product_name}}</b></a>
+                    <a href="{% url 'delete_product' product.uid %}" class="float-end" style="color: red;"><i class="bi bi-trash3"></i></a>
+                    <p></p>
+                    <div class="price mt-2">
+                        <!-- <a href="">${{product.price}}.00</a> -->
+                        {% if product.discount_percent %}
+                    <span class="product__price_discounted"><i class="small bi bi-currency-rupee"></i>{{ product.discount}}</span>
+                    <span class="product__price_original small" style="text-decoration: line-through;"><i class="small bi bi-currency-rupee"></i>{{ product.price }}</span>
+                    {% else %}  
+                    <span><i class="bi bi-currency-rupee small"></i>{{ product.price}}</span>
+                    {% endif %}
+                       <a href="{% url 'update_product' product.uid %}" class="btn btn-outline-success float-end">update</a>
+                        <p></p>
+                    </div>
+                </figcaption>
+            </figure>
+        </div>
+        {% endfor %}
+        
+    </div>
+    <p></p>
+    <!-- <div class="page-links text-center" >
+        {% if page.has_previous %}
+        <a href="{% url 'pro_list' subcategory.slug %}?page={{ page.previous_page_number }}" style="color: blue;">Pervious </a>
+        {% endif %}
+        {% if page.has_perivous and page.has_next %}
+        <a href="#"> / </a>
+        {% endif %}
+        {% if page.has_next %}
+        <a href="{% url 'pro_list' subcategory.slug %}?page={{ page.next_page_number }}" style="color: blue;"> Next</a>
+        {% endif %}
+        <p></p>
+    </div> -->
+    <p></p>
+    <div class="row " style="padding-left: 40%;">
+        {% if is_paginated %}
+    <nav class="pagination">
+        <ul class="pagination">
+            {% if page.has_previous %}
+          <li class="page-item">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="{% url 'pro_list' subcategory.slug %}?page={{ page.previous_page_number }}">Previous</a>
+          </li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+            {% if i == page.number %}
+          <li class="page-item" aria-current="page">
+            <a class="page-link" href="{% url 'pro_list' subcategory.slug %}?page={{i}}"><span >{{i}}</span></a>
+          </li>
+            {% else %}
+          <li class="page-item">
+            <a class="page-link" href="{% url 'pro_list' subcategory.slug %}?page={{i}}">{{i}}</a>
+          </li>
+            {% endif %}
+            {% endfor %}
+            {% if page.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="{% url 'pro_list' subcategory.slug %}?page={{ page.next_page_number }}" style="color: blue;"> Next</a>
+          </li>  
+            {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+    </div>
+</div>
+
+{% endblock %}

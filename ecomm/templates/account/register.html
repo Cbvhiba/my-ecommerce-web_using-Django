@@ -1,0 +1,45 @@
+{% extends 'base/index.html' %}
+{% block title %}
+Register
+{% endblock %}
+
+{% block body %}
+<section class="section-conten padding-y" style="min-height: 84vh">
+
+  <!-- =================Component Login ============ -->
+  <div class="card mx-auto" style="max-width: 380px; margin-top: 100px;">
+    <div class="card-body">
+      <h4 class="card-title mb-4">Register</h4>
+      <form action="" method="post">
+        {% csrf_token %}
+        {% include "base/alert.html" %}
+
+        <div class="form-group">
+          <input type="text" name="first_name" class="form-control" placeholder="First Name" required>
+        </div><br>
+
+        <div class="form-group">
+          <input type="text" name="last_name" class="form-control" placeholder="Last Name">
+        </div><br>
+
+        <div class="form-group">
+            <input type="email" name="email" class="form-control" placeholder="Email" required>
+          </div><br>
+
+        <div class="form-group">
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+          </div><br>
+
+        <div class="form-group">
+          <input type="submit" class="btn btn-primary btn-block" value="Register">
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <p class="text-center mt-4">Do you have account? <a href="{% url 'login' %}">Sign In</a></p>
+  <br><br>
+
+</section>
+{% endblock %}

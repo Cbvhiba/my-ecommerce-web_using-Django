@@ -1,0 +1,57 @@
+{% extends 'base/index.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+update product
+{% endblock %}
+
+{% block body %}
+<div class="container border" style="margin-top: 120px;width: 50%;">
+    <div class="form-box">
+        <form method="post" id="proForm" data-subcategory-url="{% url 'ajax_load_subcategories' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'base/alert.html' %}
+            <div class="form-group">
+                {{form|crispy}}
+            </div>
+            <div class="form-group">
+                {{img_form|crispy}}
+            </div>
+             <p></p>
+            <input type="submit" value="Update" class="btn btn-success">
+            <p></p>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_catogary").change(function () {
+        const url = $("#proForm").attr("data-subcategory-url");  // get the url of the `load_category` view
+        const catogaryId = $(this).val();  // get the selected category ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-categories/ )
+            data: {
+                'catogary_id': catogaryId       // add the category id to the GET parameters
+            },
+            success: function (data) {  // `data` is the return of the `load_subcategory` view function
+                console.log(data)
+                
+                $("#id_subcategory").html(data);  // replace the contents of the subcategory input with the data that came from the server
+                
+
+                // let html_data = '<option value="">---------</option>';
+                // data.forEach(function (subcategory) {
+                //     html_data += `<option value="${subcategory.id}">${subcategory.subcategory}</option>`
+                // });
+                // console.log(html_data);
+                // $("#id_subcategory").html(html_data);
+
+                
+            }
+        });
+
+    });
+</script>
+
+{% endblock %}

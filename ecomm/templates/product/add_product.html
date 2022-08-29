@@ -1,0 +1,63 @@
+{% extends 'base/index.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+Add product
+{% endblock %}
+
+{% block body %}
+<div class="container border" style="margin-top: 120px;width: 50%;">
+    <div class="form-box">
+        <form action="" method="post" id="proForm" enctype="multipart/form-data" data-subcategory-url="{% url 'ajax_load_subcategories' %}">
+            {% csrf_token %}
+            {% include 'base/alert.html' %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+
+                {{form|crispy}}
+            <p></p>
+            {{img_form.management_form}}
+            {% for form in img_form %}
+                {{form}}
+            {% endfor %}
+             <p></p>
+            <input type="submit" value="Add product" class="btn btn-success">
+            <p></p>
+        </form>
+    </div>
+</div>
+<p></p>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $("#id_catogary").change(function () {
+        const url = $("#proForm").attr("data-subcategory-url");  // get the url of the `load_cities` view
+        const catogaryId = $(this).val();  // get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'catogary_id': catogaryId       // add the country id to the GET parameters
+            },
+            success: function (data) {  // `data` is the return of the `load_cities` view function
+                console.log(data)
+                
+                $("#id_subcategory").html(data);  // replace the contents of the city input with the data that came from the server
+                
+
+                // let html_data = '<option value="">---------</option>';
+                // data.forEach(function (subcategory) {
+                //     html_data += `<option value="${subcategory.id}">${subcategory.subcategory}</option>`
+                // });
+                // console.log(html_data);
+                // $("#id_subcategory").html(html_data);
+
+                
+            }
+        });
+
+    });
+</script>
+
+
+{% endblock %}
