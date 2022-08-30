@@ -61,6 +61,11 @@
     .checkoutForm input{
         font-size: 16px;
     }
+    .whatsapp-chat{
+      position: fixed;
+      bottom: 2% !important;
+      left: 1% !important;
+    }
 </style>
 
 </head>
@@ -121,7 +126,7 @@
             <a class="mx-2 btn btn-sm btn-outline-primary dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="bi bi-person-circle"></span></a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" href="{% url 'edit_profile' user.id %}">Your account</a>
-              <a class="dropdown-item" href="#">Your orders</a>
+              <a class="dropdown-item" href="{% url 'your_orders' %}">Your orders</a>
               <a class="dropdown-item" href="#">Your address</a>
               {% if user.is_superuser %}
               <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
@@ -166,10 +171,13 @@
     {% endblock %}
     
   </main><!-- End #main -->
+  <a class="whatsapp-chat" href="https://wa.me/+919876543210?text=I'm%20interested%20in%20chat" target="_blank">
+    <img width="60px" height="60px" src="{% static 'assets/img/watsapp.png' %}" alt="">
+  </a>
 
       
 
-  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <!-- <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a> -->
 
   <!-- Vendor JS Files -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -181,9 +189,22 @@
   <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
   <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
   <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
-
+  <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/630df7b454f06e12d891bbf7/1gbn8v7aq';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+  })();
+</script>
+  <!--End of Tawk.to Script-->
   <!-- Template Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
+  <script src="{% static 'assets/js/checkout.js' %}"></script>
 
 </body>
 

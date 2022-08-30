@@ -97,8 +97,8 @@ checkout
                         <input type="hidden" name="payment_mode" value="COD">
                         <div class="mt-3">
                             <button type="submit" class="btn btn-success w-100">Cash on delevery</button>
+                            <button type="button" id="rzp-button1" class="btn btn-primary w-100 mt-2">Pay with Razorpay</button>
                         </div>
-                        <!-- <button id="rzp-button1" class="btn btn-primary float-md-end"> Make Purchase <i class="bi bi-caret-right-fill"></i></button> -->
                     </div>
                 </div>
             </div>
@@ -107,7 +107,8 @@ checkout
 </div>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!-- <script>
     var options = {
         "key": "rzp_test_Bz5fpUbrVpovPw",
         "amount": "{{payment.amount}}",
@@ -118,8 +119,8 @@ checkout
         "order_id": "{{payment.id}}",
         "handler": function(response){
 
-            window.location.href = `http://127.0.0.1:8000/accounts/success/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`
-            // alert(response.razorpay_payment_id);
+            // window.location.href = `http://127.0.0.1:8000/accounts/success/?razorpay_payment_id=${response.razorpay_payment_id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_signature=${response.razorpay_signature}`
+            alert(response.razorpay_payment_id);
             // alert(response.razorpay_order_id);
             // alert(response.razorpay_signature);
         },
@@ -141,7 +142,7 @@ checkout
         rzp1.open();
         e.preventDefault();
     };
-</script>
+</script> -->
 
 
 {% endblock %}

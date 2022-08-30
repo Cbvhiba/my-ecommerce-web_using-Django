@@ -1,0 +1,43 @@
+{% extends 'base/index.html' %}
+{% block title %}
+Your orders
+{% endblock %}
+
+{% block body %}
+
+<div class="container" style="margin-top: 120px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <table class="table table-stripeds table-bordereds">
+                        <thead>
+                            <tr>
+                                <!-- <th>Poduct</th> -->
+                                <th>Tracking Number</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                                <th>Order Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <!-- <td><img src="/media/{{order.product.product_images.first.image}}" alt=""></td> -->
+                                <td>{{order.tracking_no}}</td>
+                                <td>{{order.total_price}}</td>
+                                <td>{{order.status}}</td>
+                                <td>{{order.created_at}}</td>
+                                <td><a href="{% url 'orderview' order.tracking_no %}" class="btn btn-primary">View details</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

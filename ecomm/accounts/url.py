@@ -24,7 +24,10 @@ urlpatterns = [
     path('success/', views.success, name='success'),
     path('checkout/', views.checkout, name='checkout'),
     path('placeorder/', views.placeorder, name='placeorder'),
+    path('proceedtopay/', views.proceedtopay, name='proceedtopay'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('your_orders/', views.your_orders, name='your_orders'),
+    path('orderview/<t_no>', views.orderview, name='orderview'),
 
     path('ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'), # AJAX
 ]

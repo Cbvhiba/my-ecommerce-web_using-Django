@@ -364,6 +364,7 @@ def checkout(request):
     #     print("**********")
     
     # payment = None
+
     context = {'cart_obj': cart_obj, 'userdetails': userdetails}
     return render(request, 'account/checkout.html', context)
 
@@ -403,6 +404,7 @@ def placeorder(request):
         order_obj.pincode = request.POST.get('pincode')
 
         order_obj.payment_mode = request.POST.get('payment_mode')
+        order_obj.payment_id = request.POST.get('payment_id')
 
         Cart = cart.objects.filter(user=request.user)
 
@@ -434,11 +436,38 @@ def placeorder(request):
             orderproduct.total_quantity = orderproduct.total_quantity - item.quantity
             orderproduct.save()
 
-            # clear users cart
-            cart.objects.filter(user=request.user).delete()
-            messages.success(request, 'Your order has been placed successfully')
+        # clear users cart
+        cart.objects.filter(user=request.user).delete()
+        messages.success(request, 'Your order has been placed successfully')
+        payMode = request.POST.get('payment_mode')
+        if payMode == 'paid by razorpaay':
+            return JsonResponse({'status': "Your order has been placed successfull"})
 
     return redirect('checkout')
+
+
+def proceedtopay(request):
+    Cart = cart.objects.filter(user=request.user)
+    total_price = 0
+    for item in Cart:
+        total_price = item.get_cart_total()
+
+    return JsonResponse({
+        'total_price': total_price
+    })
+
+
+def your_orders(request):
+    orders = Order.objects.filter(user=request.user)
+    context = {'orders': orders}
+    return render(request, 'home/yourOrder.html', context)
+
+
+def orderview(request, t_no):
+    order = Order.objects.filter(tracking_no=t_no).filter(user=request.user).first()
+    orderitem = OrderItems.objects.filter(order=order)
+    context = {'order': order, 'orderitem': orderitem}
+    return render(request, 'home/vieworder.html', context)
 
 
 def dashboard(request):

@@ -145,7 +145,7 @@ EMAIL_HOST_PASSWORD = 'jcitjdpzasyzneik'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-KEY = 'rzp_test_Bz5fpUbrVpovPw'
-SECRET = 'jFnUSeG5AWKVVxaFjINfVebi'
+KEY = 'rzp_test_oRfSzsSGPgUAwU'
+# SECRET = 'jFnUSeG5AWKVVxaFjINfVebi'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
