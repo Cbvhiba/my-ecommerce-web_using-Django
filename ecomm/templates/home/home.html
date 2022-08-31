@@ -14,6 +14,7 @@ Home
 
     <div class="row" style="margin-top: 10px;">
         <h2 class="text-center">Shop Now</h2>
+        <hr>
         {% for catogary in catogaries %}
         <div class="col-md-3">
             <figure class="card card-product-grid">
@@ -32,33 +33,54 @@ Home
 
     <div class="row" style="margin-top: 10px;">
         <h2 class="text-center">Featured Products</h2>
-        {% for product in products %}
-        <div class="col-md-3">
-            <figure class="card card-product-grid">
-                {% if product.tag %}
-                <label class="product-tag">{{product.tag}}</label>
-                {% endif %}
-                <div class="img-wrap embed-responsive embed-responsive-16by9" style="height: 250px ;"><img class="card-img-top embed-responsive-item" style="height: 250px ;" src="/media/{{product.product_images.first.image}}"></div>
-                <figcaption class="info-wrap border-top">
-                    <a href="{% url 'get_product' product.slug %}" class="title"><b>{{product.product_name}}</b></a>
-                    <!-- <div class="price mt-2"><i class="bi bi-currency-rupee small"></i>{{product.price}}.00</div> -->
-                    <div class="price mt-2">
-                        <!-- <a href="">${{product.price}}.00</a> -->
-                        {% if product.discount_percent %}
-                        <span class="product__price_discounted"><i class="small bi bi-currency-rupee"></i>{{ product.discount}}</span>
-                        <span class="product__price_original small" style="text-decoration: line-through;"><i class="small bi bi-currency-rupee"></i>{{ product.price }}</span>
-                        {% else %}  
-                        <span><i class="bi bi-currency-rupee small"></i>{{ product.price}}</span>
-                        {% endif %}
-                       <!-- <a href="{% url 'update_product' product.uid %}" class="btn btn-outline-success float-end">update</a> -->
-                        <p></p>
-                    </div>
-                </figcaption>
-            </figure>
+        <hr>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-3">
+                <figure class="card card-product-grid">
+                    {% if product.tag %}
+                    <label class="product-tag">{{product.tag}}</label>
+                    {% endif %}
+                    <div class="img-wrap embed-responsive embed-responsive-16by9" style="height: 250px ;"><img class="card-img-top embed-responsive-item" style="height: 250px ;" src="/media/{{product.product_images.first.image}}"></div>
+                    <figcaption class="info-wrap border-top">
+                        <a href="{% url 'get_product' product.slug %}" class="title"><b>{{product.product_name}}</b></a>
+                        <!-- <div class="price mt-2"><i class="bi bi-currency-rupee small"></i>{{product.price}}.00</div> -->
+                        <div class="price mt-2">
+                            <!-- <a href="">${{product.price}}.00</a> -->
+                            {% if product.discount_percent %}
+                            <span class="product__price_discounted"><i class="small bi bi-currency-rupee"></i>{{ product.discount}}</span>
+                            <span class="product__price_original small" style="text-decoration: line-through;"><i class="small bi bi-currency-rupee"></i>{{ product.price }}</span>
+                            {% else %}  
+                            <span><i class="bi bi-currency-rupee small"></i>{{ product.price}}</span>
+                            {% endif %}
+                        <!-- <a href="{% url 'update_product' product.uid %}" class="btn btn-outline-success float-end">update</a> -->
+                            <p></p>
+                        </div>
+                    </figcaption>
+                </figure>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
 
+<script>
+    $('.owl-carousel').owlCarousel({
+        loop:true,
+        margin:10,
+        nav:true,
+        responsive:{
+            0:{
+                items:1
+            },
+            600:{
+                items:3
+            },
+            1000:{
+                items:4
+            },
+        },
+    });
+</script>
 
 {% endblock %}

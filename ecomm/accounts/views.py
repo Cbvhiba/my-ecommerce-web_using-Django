@@ -470,5 +470,32 @@ def orderview(request, t_no):
     return render(request, 'home/vieworder.html', context)
 
 
+def password_reset(request):
+    try:
+        if request.method == 'POST':
+            email = request.POST.get('email')
+            if not User.objects.filter(email=email):
+                messages.warning(request, "This email is not found has registered email")
+                return redirect('password_reset')
+            
+            useremail = User.objects.filter(email=email)
+            messages.success(request, "We've mailed the instructions for setting password. Please check your email")
+            return HttpResponseRedirect(request.path_info)
+
+            
+    except Exception as e:
+        print(e)
+    
+    return render(request, 'account/password_reset_form.html')
+
+
+def reset_password(request):
+    return render(request, 'account/pass_reset_confirm.html')
+
+
+def pass_reset_complete(request):
+    return render(request, 'account/pass_reset_complete.html')
+
+
 def dashboard(request):
     return render(request, 'home/dashboard.html')

@@ -1,5 +1,6 @@
 from django.urls import path
 from accounts import views
+# from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('login/', views.login_page, name='login'),
@@ -30,4 +31,10 @@ urlpatterns = [
     path('orderview/<t_no>', views.orderview, name='orderview'),
 
     path('ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'), # AJAX
+
+    # reset password urls
+    path('password_reset/', views.password_reset, name='password_reset'),
+    path('reset_password/', views.reset_password, name='reset_password'),
+    # path('reset/', auth_views.reset, name='reset'),
+    path('pass_reset_complete/', views.pass_reset_complete, name='pass_reset_complete'),
 ]
