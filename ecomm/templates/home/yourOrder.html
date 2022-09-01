@@ -30,7 +30,7 @@ Your orders
                                 <td>{{order.total_price}}</td>
                                 <td>{{order.status}}</td>
                                 <td>{{order.created_at}}</td>
-                                <td><a href="{% url 'orderview' order.tracking_no %}" class="btn btn-primary">View details</a></td>
+                                <td><a href="{% url 'orderview' order.tracking_no %}" class="btn btn-outline-primary">View details</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>

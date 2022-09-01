@@ -6,11 +6,6 @@ subcategory list
 {% block body %} 
 
 <div class="container mt-5 pt-5">
-    {% if user.is_superuser %}
-    <div class="row">
-        <a href="" class="btn btn-sm btn-outline-primary float-end" style="width: 200px;"><i class="bi bi-plus"></i> Add subcategory</i></a>
-    </div>
-    {% endif %}
     <div class="row">
         <h2 class="text-center">{{category.catogary_name}}</h2>
         {% for catogary in subcategory %}
@@ -22,11 +17,6 @@ subcategory list
                     <a href="{% url 'pro_list' catogary.slug %}" class="title"><b>{{catogary.subcategory}}</b></a>
                     <a href="{% url 'delete_product' catogary.uid %}" class="float-end" style="color: red;"><i class="bi bi-trash3"></i></a>
                     <p></p>
-                    <!-- <div class="price mt-2">
-                        <a href="">${{catogary.price}}.00</a>
-<!--                        <a href="#" class="btn btn-outline-success float-end">update</a>-->
-                        <!-- <p></p> -->
-                    <!-- </div> --> 
                 </figcaption>
             </figure>
         </div>
