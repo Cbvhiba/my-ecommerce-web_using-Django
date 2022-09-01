@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
-from accounts.forms import ProductForm, ProductImageForm, CatogaryForm, ProfileForm, SubcatogaryForm, ProductUpdateForm
+from accounts.forms import ColorVariantForm, CouponForm, ProductForm, ProductImageForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm
 from accounts.models import Profile, UserDetails, cartItems, cart, Order, OrderItems
 from products.models import Coupon, Product, ProductImages, SizeVariant, Catogary, SubCategory
 from django.contrib.auth import authenticate, login, logout
@@ -14,6 +14,8 @@ from django.http import JsonResponse
 # from django.forms import inlineformset_factory
 from django.conf import settings
 import random
+import uuid
+from base.emails import send_forget_password_mail
 # Create your views here.
 
 
@@ -77,6 +79,7 @@ def activate_email(request, email_token):
         return HttpResponse('Invalid Email token')
 
 
+@login_required
 def edit_profile(request, id):
     profile = User.objects.get(id=id)
     form = ProfileForm(instance=profile)
@@ -373,12 +376,12 @@ def checkout(request):
 def placeorder(request):
     if request.method == "POST":
 
-        currentuser = User.objects.filter(user=request.user.id).first()
-        if not currentuser.first_name:
-            currentuser.first_name = request.POST.get('fname')
-            currentuser.last_name = request.POST.get('lname')
-            currentuser.email = request.POST.get('email')
-            currentuser.save()
+        # currentuser = User.objects.filter(user=request.user).first()
+        # if not currentuser.first_name:
+        #     currentuser.first_name = request.POST.get('fname')
+        #     currentuser.last_name = request.POST.get('lname')
+        #     # currentuser.email = request.POST.get('email')
+        #     currentuser.save()
 
         if not UserDetails.objects.filter(user=request.user):
             userdetails = UserDetails()
@@ -443,7 +446,7 @@ def placeorder(request):
         if payMode == 'paid by razorpaay':
             return JsonResponse({'status': "Your order has been placed successfull"})
 
-    return redirect('checkout')
+    return redirect('your_orders')
 
 
 def proceedtopay(request):
@@ -457,6 +460,7 @@ def proceedtopay(request):
     })
 
 
+@login_required
 def your_orders(request):
     orders = Order.objects.filter(user=request.user)
     context = {'orders': orders}
@@ -479,6 +483,9 @@ def password_reset(request):
                 return redirect('password_reset')
             
             useremail = User.objects.filter(email=email)
+            forget_password_token = str(uuid.uuid4())
+            print('//////////',forget_password_token,'//////////')
+            send_forget_password_mail(useremail, forget_password_token)
             messages.success(request, "We've mailed the instructions for setting password. Please check your email")
             return HttpResponseRedirect(request.path_info)
 
@@ -489,7 +496,12 @@ def password_reset(request):
     return render(request, 'account/password_reset_form.html')
 
 
-def reset_password(request):
+def reset_password(request, forget_password_token):
+    try:
+        profile_obj = Profile.objects.filter(forget_password_token=forget_password_token)
+
+    except Exception as e:
+        print(e)
     return render(request, 'account/pass_reset_confirm.html')
 
 
@@ -499,3 +511,74 @@ def pass_reset_complete(request):
 
 def dashboard(request):
     return render(request, 'home/dashboard.html')
+
+
+def add_colorvariant(request):
+    if request.method == 'POST':
+        form = ColorVariantForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Color Added Successfully')
+            return redirect('add_colorvariant')
+        else:
+            messages.warning(request, 'Color is not added, Try Again!')
+            return redirect('add_colorvariant')
+    else:
+        form = ColorVariantForm()
+        return render(request, 'product/add_colorvariant.html', {'form': form})
+
+
+def add_sizevariant(request):
+    if request.method == 'POST':
+        form = SizeVariantForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Size Added Successfully')
+            return redirect('add_sizevariant')
+        else:
+            messages.warning(request, 'Size is not added, Try Again!')
+            return redirect('add_sizevariant')
+    else:
+        form = SizeVariantForm()
+        return render(request, 'product/add_sizevariant.html', {'form': form})
+
+
+def add_coupon(request):
+    if request.method == 'POST':
+        form = CouponForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Coupon Added Successfully')
+            return redirect('add_sizevariant')
+        else:
+            messages.warning(request, 'Coupon is not added, Try Again!')
+            return redirect('add_sizevariant')
+    else:
+        form = CouponForm()
+        return render(request, 'product/add_coupon.html', {'form': form})
+
+
+def add_tag(request):
+    if request.method == 'POST':
+        form = TagForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'Tag Added Successfully')
+            return redirect('add_sizevariant')
+        else:
+            messages.warning(request, 'Tag is not added, Try Again!')
+            return redirect('add_sizevariant')
+    else:
+        form = TagForm()
+        return render(request, 'product/add_tag.html', {'form': form})
+
+
+
+# def delete_catogary(request, uid):
+#     try:
+#         catogary = Catogary.objects.get(uid=uid)
+#         catogary.delete()
+#     except Exception as e:
+#         print(e)
+
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

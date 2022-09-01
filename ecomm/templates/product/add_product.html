@@ -6,10 +6,10 @@ Add product
 
 {% block body %}
 <div class="container border" style="margin-top: 120px;width: 50%;">
+    {% include 'base/alert.html' %}
     <div class="form-box">
         <form action="" method="post" id="proForm" enctype="multipart/form-data" data-subcategory-url="{% url 'ajax_load_subcategories' %}">
             {% csrf_token %}
-            {% include 'base/alert.html' %}
             {% for hidden in form.hidden_fields %}
                 {{ hidden }}
             {% endfor %}

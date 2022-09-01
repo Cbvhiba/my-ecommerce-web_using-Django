@@ -1,0 +1,22 @@
+{% extends 'base/index.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+Add catogary
+{% endblock %}
+
+{% block body %}
+<div class="container border" style="margin-top: 120px;width: 50%;">
+    <div class="form-box">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'base/alert.html' %}
+            <div class="form-group">
+                {{form|crispy}}
+            </div>
+             <p></p>
+            <input type="submit" value="Add size" class="btn btn-success">
+            <p></p>
+        </form>
+    </div>
+</div>
+{% endblock %}

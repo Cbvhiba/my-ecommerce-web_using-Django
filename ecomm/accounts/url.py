@@ -29,12 +29,14 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('your_orders/', views.your_orders, name='your_orders'),
     path('orderview/<t_no>', views.orderview, name='orderview'),
+    path('add_colorvariant/', views.add_colorvariant, name='add_colorvariant'),
+    path('add_sizevariant/', views.add_sizevariant, name='add_sizevariant'),
+    path('add_coupon/', views.add_coupon, name='add_coupon'),
+    path('add_tag/', views.add_tag, name='add_tag'),
 
     path('ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'), # AJAX
 
-    # reset password urls
     path('password_reset/', views.password_reset, name='password_reset'),
-    path('reset_password/', views.reset_password, name='reset_password'),
-    # path('reset/', auth_views.reset, name='reset'),
+    path('reset_password/<forget_password_token>', views.reset_password, name='reset_password'),
     path('pass_reset_complete/', views.pass_reset_complete, name='pass_reset_complete'),
 ]

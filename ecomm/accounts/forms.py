@@ -1,7 +1,6 @@
 from django import forms
-from products.models import Product, ProductImages, Catogary, SubCategory
+from products.models import Product, ProductImages, Catogary, SubCategory, ColorVariant, Coupon, SizeVariant, Tag
 from django.contrib.auth.models import User
-
 
 
 class ProductForm(forms.ModelForm):
@@ -61,3 +60,31 @@ class ProductUpdateForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['product_name', 'slug', 'price', 'discount_percent','total_quantity', 'product_desc', 'product_information','tag', 'color_variant', 'size_variant', 'is_featured']
+
+
+class SizeVariantForm(forms.ModelForm):
+
+    class Meta:
+        model = SizeVariant
+        fields = '__all__'
+
+
+class ColorVariantForm(forms.ModelForm):
+
+    class Meta:
+        model = ColorVariant
+        fields = '__all__'
+
+
+class CouponForm(forms.ModelForm):
+
+    class Meta:
+        model = Coupon
+        fields = '__all__'
+
+
+class TagForm(forms.ModelForm):
+
+    class Meta:
+        model = Tag
+        fields = '__all__'

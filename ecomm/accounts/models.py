@@ -26,6 +26,18 @@ class Profile(BaseModel):
     def get_cart_count(self):
         return cartItems.objects.filter(cart__is_paid=False, cart__user=self.user).count()
 
+@receiver(post_save, sender=User)
+def send_email_token(sender, instance, created, **kwargs):
+    try:
+        if created:
+            email_token = str(uuid.uuid4())
+            Profile.objects.create(user=instance, email_token=email_token)
+            email = instance.email
+            send_account_activation_email(email, email_token)
+            print('/////////',email_token,'///////')
+    except Exception as e:
+        print(e)
+
 
 class UserDetails(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -172,28 +184,15 @@ class OrderItems(BaseModel):
         return sum(Price)
 
 
+# @receiver(post_save, sender=User)
+# def send_forget_password_token(sender, instance, created, **kwargs):
+#     try:
+#         if created:
+#             forget_password_token = str(uuid.uuid4())
+#             print(forget_password_token)
+#             Profile.objects.create(user=instance, forget_password_token=forget_password_token)
+#             email = instance.email
+#             send_forget_password_mail(email, forget_password_token)
 
-@receiver(post_save, sender=User)
-def send_email_token(sender, instance, created, **kwargs):
-    try:
-        if created:
-            email_token = str(uuid.uuid4())
-            Profile.objects.create(user=instance, email_token=email_token)
-            email = instance.email
-            send_account_activation_email(email, email_token)
-
-    except Exception as e:
-        print(e)
-
-
-@receiver(post_save, sender=User)
-def send_forget_password_token(sender, instance, created, **kwargs):
-    try:
-        if created:
-            forget_password_token = str(uuid.uuid4())
-            Profile.objects.create(user=instance, email_token=forget_password_token)
-            email = instance.email
-            send_forget_password_mail(email, forget_password_token)
-
-    except Exception as e:
-        print(e)
+#     except Exception as e:
+#         print(e)
