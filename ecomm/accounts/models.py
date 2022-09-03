@@ -164,6 +164,7 @@ class Order(BaseModel):
 class OrderItems(BaseModel):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
     price = models.IntegerField()
     quantity = models.IntegerField()
 

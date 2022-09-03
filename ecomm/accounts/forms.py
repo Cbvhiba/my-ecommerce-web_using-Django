@@ -1,5 +1,6 @@
 from django import forms
 from products.models import Product, ProductImages, Catogary, SubCategory, ColorVariant, Coupon, SizeVariant, Tag
+from accounts.models import Order
 from django.contrib.auth.models import User
 
 
@@ -88,3 +89,10 @@ class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = '__all__'
+
+
+class OrderForm(forms.ModelForm):
+    
+    class Meta:
+        model = Order
+        fields = ['first_name', 'email', 'phone', 'address', 'status', 'tracking_no']

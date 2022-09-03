@@ -13,19 +13,33 @@ Orders
                 <table class="table table-stripeds table-bordereds">
                     <tr>
                         <td>Name</td>
+                        <td>Product Name</td>
                         <td>Payment Mode</td>
                         <td>Total Price</td>
+                        <td>Coupon</td>
+                        <td>Tracking Number</td>
                         <td>Status</td>
+                        <td>Order Date</td>
                         <td></td>
                         <td></td>
                     </tr>
-                    {% for order in orders %}
+                    {% for order in orderitems %}
                     <tr>
-                        <td>{{order.first_name}}</td>
-                        <td>{{order.payment_mode}}</td>
-                        <td>{{order.total_price}}</td>
-                        <td>{{order.status}}</td>
-                        <td><a class="btn btn-outline-primary" href=""><i class="bi bi-pen"></i></a></td>
+                        <td>{{order.order.first_name}}</td>
+                        <td>{{order.product.product_name}}</td>
+                        <td>{{order.order.payment_mode}}</td>
+                        <td>{{order.order.total_price}}</td>
+                        <td>
+                            {% if order.coupon %}
+                            {{order.coupon.coupon_code}}
+                            {% else %}
+                            No coupon is used
+                            {% endif %}
+                        </td>
+                        <td>{{order.order.tracking_no}}</td>
+                        <td>{{order.order.status}}</td>
+                        <td>{{order.created_at}}</td>
+                        <td><a class="btn btn-outline-primary" href="{% url 'update_order' order.order.uid %}"><i class="bi bi-pen"></i></a></td>
                         <td><a href="" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a></td>
                     </tr>
                     {% endfor %}

@@ -46,7 +46,9 @@ urlpatterns = [
     path('product_adminview/', views.product_adminview, name='product_adminview'),
     path('coupon_adminview/', views.coupon_adminview, name='coupon_adminview'),
     path('tag_adminview/', views.tag_adminview, name='tag_adminview'),
-    path('orderitem_adminview/', views.orderitem_adminview, name='orderitem_adminview'),
+    path('user_adminview/', views.user_adminview, name='user_adminview'),
     path('order_adminview/', views.order_adminview, name='order_adminview'),
+
+    path('update_order/<uid>', views.update_order, name='update_order'),
     
 ]

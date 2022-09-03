@@ -1,10 +1,10 @@
 # from unicodedata import category
-from ast import Sub
+from ast import Or, Sub
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
-from accounts.forms import ColorVariantForm, CouponForm, ProductForm, ProductImageForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm
+from accounts.forms import ColorVariantForm, CouponForm, OrderForm, ProductForm, ProductImageForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm
 from accounts.models import Profile, UserDetails, cartItems, cart, Order, OrderItems
 from products.models import Coupon, Product, ProductImages, SizeVariant, Catogary, SubCategory, Tag
 from django.contrib.auth import authenticate, login, logout
@@ -304,6 +304,7 @@ def cart_list(request):
     cart_obj = None
     try:
         cart_obj = cart.objects.get(is_paid=False, user=request.user)
+        print('cart :', cart_obj, '/////////')
     except Exception as e:
         print(e)
     if request.method == 'POST':
@@ -330,6 +331,7 @@ def cart_list(request):
         messages.success(request, 'Coupon applied!')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+    
     context = {'cart': cart_obj}
     return render(request, 'account/cart.html', context)
 
@@ -431,6 +433,7 @@ def placeorder(request):
             OrderItems.objects.create(
                 order = order_obj,
                 product = item.product,
+                # coupon = item.cart.coupon,
                 price = item.get_product_price(),
                 quantity = item.quantity
             )
@@ -615,13 +618,33 @@ def tag_adminview(request):
     return render(request, 'product/admin_tag.html', context)
 
 
-def orderitem_adminview(request):
-    orderitems = OrderItems.objects.all()
-    context = {'orderitems': orderitems}
+def user_adminview(request):
+    user = User.objects.all()
+    context = {'user': user}
     return render(request, 'product/admin_orderitem.html', context)
 
 
 def order_adminview(request):
     orders = Order.objects.all()
-    context = {'orders': orders}
+    orderitems = OrderItems.objects.all()
+    context = {'orders': orders, 'orderitems': orderitems}
     return render(request, 'product/admin_order.html', context)
+
+
+def update_order(request, uid):
+    order = Order.objects.get(uid=uid)
+    form = OrderForm(instance=order)
+    if request.method == 'POST':
+        form = OrderForm(request.POST, instance=order)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.save()
+
+            messages.success(request, 'Order details updated successfully')
+            return redirect('order_adminview')
+        else:
+            messages.warning(request, 'Product is not updated, Try Again!')
+            return redirect('order_adminview')
+   
+    context = {'form': form}
+    return render (request, 'product/update_order.html', context)
