@@ -1,11 +1,12 @@
 # from unicodedata import category
+from ast import Sub
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
 from accounts.forms import ColorVariantForm, CouponForm, ProductForm, ProductImageForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm
 from accounts.models import Profile, UserDetails, cartItems, cart, Order, OrderItems
-from products.models import Coupon, Product, ProductImages, SizeVariant, Catogary, SubCategory
+from products.models import Coupon, Product, ProductImages, SizeVariant, Catogary, SubCategory, Tag
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import razorpay
@@ -237,8 +238,8 @@ def delete_product(request, uid):
 
 
 def update_product(request, uid):
-    product = Product.objects.get(uid=uid)
-    product_img = ProductImages.objects.get(product_id=uid)
+    product = Product.objects.filter(uid=uid).first()
+    product_img = ProductImages.objects.filter(product_id=uid).first()
     form = ProductUpdateForm(instance=product)
     img_form = ProductImageForm(instance=product_img)
     if request.method == 'POST':
@@ -474,6 +475,17 @@ def orderview(request, t_no):
     return render(request, 'home/vieworder.html', context)
 
 
+def delete_order(request, uid):
+    try:
+        order = Order.objects.get(uid=uid)
+        order.delete()
+    except Exception as e:
+        print(e)
+
+    messages.warning(request, 'Delete Successfully')
+    return redirect('your_orders')
+
+
 def password_reset(request):
     try:
         if request.method == 'POST':
@@ -573,12 +585,43 @@ def add_tag(request):
         return render(request, 'product/add_tag.html', {'form': form})
 
 
+def category_adminview(request):
+    catogaries = Catogary.objects.all()
+    context = {'catogaries': catogaries}
+    return render(request, 'product/admin_category.html', context)
 
-# def delete_catogary(request, uid):
-#     try:
-#         catogary = Catogary.objects.get(uid=uid)
-#         catogary.delete()
-#     except Exception as e:
-#         print(e)
 
-#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+def subcategory_adminview(request):
+    subcategory = SubCategory.objects.all()
+    context = {'subcategory': subcategory}
+    return render(request, 'product/admin_subcategory.html', context)
+
+
+def product_adminview(request):
+    products = Product.objects.all()
+    context = {'products': products}
+    return render(request, 'product/admin_product.html', context)
+
+
+def coupon_adminview(request):
+    coupons = Coupon.objects.all()
+    context = {'coupons': coupons}
+    return render(request, 'product/admin_coupon.html', context)
+
+
+def tag_adminview(request):
+    tags = Tag.objects.all()
+    context = {'tags': tags}
+    return render(request, 'product/admin_tag.html', context)
+
+
+def orderitem_adminview(request):
+    orderitems = OrderItems.objects.all()
+    context = {'orderitems': orderitems}
+    return render(request, 'product/admin_orderitem.html', context)
+
+
+def order_adminview(request):
+    orders = Order.objects.all()
+    context = {'orders': orders}
+    return render(request, 'product/admin_order.html', context)

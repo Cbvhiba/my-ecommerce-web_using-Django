@@ -66,6 +66,9 @@ Your orders
                             <h6>Payment Mode : <span class="float-end">{{order.payment_mode}}</span></h6>
                             <h6>Order Status : <span class="float-end">{{order.status}}</span></h6>
                             <h6>Trackin Number : <span class="float-end">{{order.tracking_no}}</span></h6>
+                            <div class="cancel_order pt-2">
+                                <a href="{% url 'delete_order' order.uid %} " class="btn btn-outline-danger float-end"><i class="bi bi-trash"></i> Cancel order</a>
+                            </div>
                         </div>
                     </div>
                 </div>

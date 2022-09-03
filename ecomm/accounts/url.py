@@ -29,6 +29,7 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('your_orders/', views.your_orders, name='your_orders'),
     path('orderview/<t_no>', views.orderview, name='orderview'),
+    path('delete_order/<uid>', views.delete_order, name='delete_order'),
     path('add_colorvariant/', views.add_colorvariant, name='add_colorvariant'),
     path('add_sizevariant/', views.add_sizevariant, name='add_sizevariant'),
     path('add_coupon/', views.add_coupon, name='add_coupon'),
@@ -39,4 +40,13 @@ urlpatterns = [
     path('password_reset/', views.password_reset, name='password_reset'),
     path('reset_password/<forget_password_token>', views.reset_password, name='reset_password'),
     path('pass_reset_complete/', views.pass_reset_complete, name='pass_reset_complete'),
+
+    path('category_adminview/', views.category_adminview, name='category_adminview'),
+    path('subcategory_adminview/', views.subcategory_adminview, name='subcategory_adminview'),
+    path('product_adminview/', views.product_adminview, name='product_adminview'),
+    path('coupon_adminview/', views.coupon_adminview, name='coupon_adminview'),
+    path('tag_adminview/', views.tag_adminview, name='tag_adminview'),
+    path('orderitem_adminview/', views.orderitem_adminview, name='orderitem_adminview'),
+    path('order_adminview/', views.order_adminview, name='order_adminview'),
+    
 ]

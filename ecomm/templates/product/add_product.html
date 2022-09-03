@@ -7,6 +7,10 @@ Add product
 {% block body %}
 <div class="container border" style="margin-top: 120px;width: 50%;">
     {% include 'base/alert.html' %}
+    <div class="row mt-2" style="width: max-content;padding-left: 90%;">
+        <a href="{% url 'dashboard' %}" class="btn btn-success float-end"><i class="bi bi-reply"></i> Back</a>
+    </div>
+   <div class="row">
     <div class="form-box">
         <form action="" method="post" id="proForm" enctype="multipart/form-data" data-subcategory-url="{% url 'ajax_load_subcategories' %}">
             {% csrf_token %}
@@ -25,6 +29,7 @@ Add product
             <p></p>
         </form>
     </div>
+   </div>
 </div>
 <p></p>
 

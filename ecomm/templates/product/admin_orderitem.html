@@ -1,0 +1,37 @@
+{% extends 'base/index.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+OrderItems
+{% endblock %}
+
+{% block body %}
+
+<div class="container" style="margin-top: 100px;">
+    <div class="row mt-2">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-stripeds table-bordereds">
+                    <tr>
+                        <td>Product Name</td>
+                        <td>Price</td>
+                        <td>Quantity</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% for orderitem in orderitems %}
+                    <tr>
+                        <td>{{orderitem.product.product_name}}</td>
+                        <td>{{orderitem.price}}</td>
+                        <td>{{orderitem.quantity}}</td>
+                        <td><a class="btn btn-outline-primary" href=""><i class="bi bi-pen"></i></a></td>
+                        <td><a href="" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
