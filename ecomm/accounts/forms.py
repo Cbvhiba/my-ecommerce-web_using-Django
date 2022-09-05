@@ -1,6 +1,6 @@
 from django import forms
-from products.models import Product, ProductImages, Catogary, SubCategory, ColorVariant, Coupon, SizeVariant, Tag
-from accounts.models import Order
+from products.models import Product, ProductImages, Catogary, ProductReview, SubCategory, ColorVariant, Coupon, SizeVariant, Tag
+from accounts.models import Order    #, UserDetails
 from django.contrib.auth.models import User
 
 
@@ -55,6 +55,13 @@ class ProfileForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'email']
 
+    
+# class UserDetailsForm(forms.ModelForm):
+
+#     class Meta:
+#         model = UserDetails
+#         fields = '__all__'
+
 
 class ProductUpdateForm(forms.ModelForm):
 
@@ -96,3 +103,10 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['first_name', 'email', 'phone', 'address', 'status', 'tracking_no']
+
+
+class ReviewForm(forms.ModelForm):
+
+    class Meta:
+        model = ProductReview
+        fields = ['review_text', 'review_rating']

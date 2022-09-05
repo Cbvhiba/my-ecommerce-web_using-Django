@@ -38,3 +38,6 @@ class SizeVariantAdmin(admin.ModelAdmin):
 admin.site.register(Product, ProductAdmin)
 
 admin.site.register(ProductImages)
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product', 'review_rating']
+admin.site.register(ProductReview, ProductReviewAdmin)

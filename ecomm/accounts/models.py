@@ -54,7 +54,6 @@ class cart(BaseModel):
     coupon = models.ForeignKey(Coupon, on_delete=models.SET_NULL, null=True, blank=True)
     is_paid = models.BooleanField(default=False)
 
-
     class Meta:
         verbose_name_plural = '2 . Carts'
 

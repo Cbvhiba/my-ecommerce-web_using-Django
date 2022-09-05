@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
-from accounts.forms import ColorVariantForm, CouponForm, OrderForm, ProductForm, ProductImageForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm
+from accounts.forms import ColorVariantForm, CouponForm, OrderForm, ProductForm, ProductImageForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm    #, UserDetailsForm
 from accounts.models import Profile, UserDetails, cartItems, cart, Order, OrderItems
 from products.models import Coupon, Product, ProductImages, SizeVariant, Catogary, SubCategory, Tag
 from django.contrib.auth import authenticate, login, logout
@@ -83,11 +83,15 @@ def activate_email(request, email_token):
 @login_required
 def edit_profile(request, id):
     profile = User.objects.get(id=id)
+    # userdetails = UserDetails.objects.get(user_id=id)
     form = ProfileForm(instance=profile)
+    # userform = UserDetailsForm(instance=userdetails)
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
-        if form.is_valid():
+        # userform = UserDetailsForm(request.POST, instance=userdetails)
+        if form.is_valid(): # and userform.is_valid():
             form.save() 
+            # userform.save()
 
             messages.success(request, 'Successfully Edit your Profile')
             return redirect('edit_profile/<id>')
@@ -95,7 +99,7 @@ def edit_profile(request, id):
             messages.warning(request, 'Profile is not Edited, Try Again!')
             return redirect('edit_profile/<id>')
 
-    context = {'form': form}
+    context = {'form': form} #'userform': userform}
     return render(request, 'account/edit_profile.html', context)
 
 
@@ -268,6 +272,11 @@ def update_product(request, uid):
     # img_form = ProductImageForm()
     context = {'form': form, 'img_form': img_form}
     return render (request, 'product/update_product.html', context)
+
+
+@login_required
+def add_product_review(request):
+    return redirect('')
 
 
 @login_required
@@ -641,10 +650,10 @@ def update_order(request, uid):
             f.save()
 
             messages.success(request, 'Order details updated successfully')
-            return redirect('order_adminview')
+            return redirect('update_order/<uid>')
         else:
             messages.warning(request, 'Product is not updated, Try Again!')
-            return redirect('order_adminview')
+            return redirect('update_order/<uid>')
    
     context = {'form': form}
     return render (request, 'product/update_order.html', context)
