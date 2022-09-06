@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from products.models import Product, SizeVariant, ColorVariant
+from products.models import Product, ProductReview, SizeVariant, ColorVariant
 from accounts.forms import ReviewForm
 
 # Create your views here.
@@ -9,13 +9,9 @@ def get_product(request, slug):
     try:
         product = Product.objects.get(slug=slug)
         related_product = Product.objects.filter(catogary=product.catogary).exclude(slug=slug)[:4]
-        form = ReviewForm()
-        if request.method == 'POST':
-            form = ReviewForm(request.POST)
-            if form.is_valid():
-                form.save()
+        product_review = ProductReview.objects.filter(product__slug=slug)
 
-        context = {'product': product, 'related_product': related_product, 'form': form}
+        context = {'product': product, 'related_product': related_product, 'product_review': product_review}
 
         if request.GET.get('size'):
             size = request.GET.get('size')

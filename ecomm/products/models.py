@@ -128,19 +128,11 @@ class ProductImages(BaseModel):
         return self.product.product_name
 
 
-Rating = (
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4'),
-        (5, '5'),
-    )
-
 class ProductReview(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     review_text = models.TextField()
-    review_rating = models.CharField(choices=Rating, max_length=1)
+    review_rating = models.CharField(max_length=10)
 
     def __str__(self) -> str:
         return self.user.first_name 

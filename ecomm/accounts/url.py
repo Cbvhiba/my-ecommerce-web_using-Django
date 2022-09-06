@@ -48,7 +48,7 @@ urlpatterns = [
     path('tag_adminview/', views.tag_adminview, name='tag_adminview'),
     path('user_adminview/', views.user_adminview, name='user_adminview'),
     path('order_adminview/', views.order_adminview, name='order_adminview'),
-
     path('update_order/<uid>', views.update_order, name='update_order'),
+    path('review/', views.review, name='review'),
     
 ]

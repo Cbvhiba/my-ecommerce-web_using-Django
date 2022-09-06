@@ -4,9 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
-from accounts.forms import ColorVariantForm, CouponForm, OrderForm, ProductForm, ProductImageForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm    #, UserDetailsForm
+from accounts.forms import ColorVariantForm, CouponForm, OrderForm, ProductForm, ProductImageForm, ReviewForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm    #, UserDetailsForm
 from accounts.models import Profile, UserDetails, cartItems, cart, Order, OrderItems
-from products.models import Coupon, Product, ProductImages, SizeVariant, Catogary, SubCategory, Tag
+from products.models import Coupon, Product, ProductImages, SizeVariant, Catogary, SubCategory, Tag, ProductReview
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import razorpay
@@ -272,11 +272,6 @@ def update_product(request, uid):
     # img_form = ProductImageForm()
     context = {'form': form, 'img_form': img_form}
     return render (request, 'product/update_product.html', context)
-
-
-@login_required
-def add_product_review(request):
-    return redirect('')
 
 
 @login_required
@@ -657,3 +652,19 @@ def update_order(request, uid):
    
     context = {'form': form}
     return render (request, 'product/update_order.html', context)
+
+
+def review(request):
+    if request.method == "POST":
+        product_id = request.POST.get('product_id')
+        product = Product.objects.get(uid=product_id)
+        review_text = request.POST.get('review_text')
+        review_rating = request.POST.get('review_rating')
+        user = request.user
+
+        ProductReview(user=user, product=product, review_text=review_text, review_rating=review_rating).save()
+
+        messages.success(request, 'Review Added Successfully')
+        return HttpResponseRedirect(request.path_info)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
