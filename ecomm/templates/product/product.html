@@ -60,17 +60,6 @@ Product
                                 <small class="label-rating text-muted">132 reviews</small>
                                 <small class="label-rating text-success"><i class="bi bi-clipboard-check"></i>154 orders</small>
                             </div>
-
-
-                                <!-- <li>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                    <i class="bi bi-star"></i>
-                                </li> -->
-                            <!-- <small class="label-rating text-muted">132 reviews</small>
-                            <small class="label-rating text-success"><i class="bi bi-clipboard-check"></i></small> -->
                         </div>
                         <div class="mb-3" style="padding-left: 10px;">
                             <var class="price h5"><i class="bi bi-currency-rupee"></i>
@@ -134,7 +123,7 @@ Product
         <div class="row px-xl-5">
             <div class="col">
                 <div class="nav nav-tabs justify-content-center border-secondary mb-4">
-                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-1">Description</a>
+                    <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
                     <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-2">Information</a>
                     <a class="nav-item nav-link" data-toggle="tab" href="#tab-pane-3">Reviews (0)</a>
                 </div>
@@ -209,7 +198,7 @@ Product
                                     </div>
                                 </form>
                                 {% else %}
-                                Please <a class="text-primary" href="{% url 'login' %}">Login</a> for leave review 
+                                <p>You must logged in for post your Reviews,<a class="text-primary" href="{% url 'login' %}"> Login</a></p> 
                                 {% endif %}
                             </div>
                         </div>
