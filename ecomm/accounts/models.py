@@ -15,7 +15,7 @@ class Profile(BaseModel):
     is_email_verified = models.BooleanField(default=False)
     email_token = models.CharField(max_length=100, null=True, blank=True)
     forget_password_token = models.CharField(max_length=100, null=True, blank=True)
-    profile_image = models.ImageField(upload_to='profile')
+    profile_image = models.ImageField(upload_to='profile', null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '1 . Profiles'

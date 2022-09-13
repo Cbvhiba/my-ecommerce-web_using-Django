@@ -1,6 +1,6 @@
 from django import forms
 from products.models import Product, ProductImages, Catogary, ProductReview, SubCategory, ColorVariant, Coupon, SizeVariant, Tag
-from accounts.models import Order    #, UserDetails
+from accounts.models import Order, Profile    #, UserDetails
 from django.contrib.auth.models import User
 
 
@@ -49,11 +49,11 @@ class SubcatogaryForm(forms.ModelForm):
         fields = '__all__'
 
 
-class ProfileForm(forms.ModelForm):
+class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email']
+        fields = '__all__'
 
     
 # class UserDetailsForm(forms.ModelForm):
@@ -110,3 +110,10 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = ProductReview
         fields = ['review_text', 'review_rating']
+
+
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = Profile
+        fields = ['is_email_verified', 'email_token', 'profile_image']

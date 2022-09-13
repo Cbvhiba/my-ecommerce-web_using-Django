@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from django.contrib.auth.models import User
-from accounts.forms import ColorVariantForm, CouponForm, OrderForm, ProductForm, ProductImageForm, ReviewForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm    #, UserDetailsForm
+from accounts.forms import ColorVariantForm, CouponForm, OrderForm, ProductForm, ProductImageForm, ReviewForm, CatogaryForm, ProfileForm, SizeVariantForm, SubcatogaryForm, ProductUpdateForm, TagForm, UserForm    #, UserDetailsForm
 from accounts.models import Profile, UserDetails, cartItems, cart, Order, OrderItems
 from products.models import Coupon, Product, ProductImages, SizeVariant, Catogary, SubCategory, Tag, ProductReview
 from django.contrib.auth import authenticate, login, logout
@@ -82,12 +82,12 @@ def activate_email(request, email_token):
 
 @login_required
 def edit_profile(request, id):
-    profile = User.objects.get(id=id)
+    user = User.objects.get(id=id)
     # userdetails = UserDetails.objects.get(user_id=id)
-    form = ProfileForm(instance=profile)
+    form = UserForm(instance=user)
     # userform = UserDetailsForm(instance=userdetails)
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile)
+        form = UserForm(request.POST, instance=user)
         # userform = UserDetailsForm(request.POST, instance=userdetails)
         if form.is_valid(): # and userform.is_valid():
             form.save() 
@@ -101,6 +101,16 @@ def edit_profile(request, id):
 
     context = {'form': form} #'userform': userform}
     return render(request, 'account/edit_profile.html', context)
+
+
+def delete_user(request, id):
+    try:
+        user = User.objects.get(id=id)
+        user.delete()
+    except Exception as e:
+        print(e)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def logout_page(request):
@@ -625,7 +635,13 @@ def tag_adminview(request):
 def user_adminview(request):
     user = User.objects.all()
     context = {'user': user}
-    return render(request, 'product/admin_orderitem.html', context)
+    return render(request, 'product/admin_user.html', context)
+
+
+def profile_adminview(request):
+    profile = Profile.objects.all()
+    context = {'profile': profile}
+    return render(request, 'product/admin_profile.html', context)
 
 
 def order_adminview(request):
@@ -668,3 +684,22 @@ def review(request):
         return HttpResponseRedirect(request.path_info)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER')) 
+
+
+def edit_user(request, uid):
+    profile = Profile.objects.get(uid=uid)
+    form = ProfileForm(instance=profile)
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.save()
+
+            messages.success(request, 'Profile updated successfully')
+            return redirect('edit_user/<uid>')
+        else:
+            messages.warning(request, 'Profilet is not updated, Try Again!')
+            return redirect('edit_user/<uid>')
+   
+    context = {'form': form}
+    return render (request, 'product/edit_user.html', context)

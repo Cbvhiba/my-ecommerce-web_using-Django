@@ -1,0 +1,39 @@
+{% extends 'base/index.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+Profile
+{% endblock %}
+
+{% block body %}
+
+<div class="container" style="margin-top: 100px;">
+    <div class="row mt-2" style="width: max-content;padding-left: 95%;">
+        <a href="{% url 'add_tag' %}" class="btn btn-success float-end"><i class="bi bi-plus"></i> Add</a>
+    </div>
+    <div class="row mt-2">
+        {% include 'base/alert.html' %}
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-stripeds table-bordereds">
+                    <tr>
+                        <td>Name</td>
+                        <td>email_varified</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    {% for profile in profile %}
+                    <tr>
+                        <td>{{profile.user.first_name}}</td>
+                        <td>{{profile.is_email_verified}}</td>
+                        <td><a class="btn btn-outline-primary" href="{% url 'edit_user' profile.uid %}"><i class="bi bi-pen"></i></a></td>
+                        <td><a href="" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
